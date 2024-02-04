@@ -27,7 +27,7 @@ namespace EVAHN_LE_GAL
             Console.WriteLine(" --- Application C# Evahn LE GAL ---");
             Console.WriteLine("-type command 'help' to display possible actions\n");
 
-            // Lance et fait trourner l'application entière
+            // Lance et fait tourner l'application entière
             while (!needToQuit) {
                 needToQuit = entryConsole.readCommandUser();
             }
