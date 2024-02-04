@@ -13,7 +13,7 @@ namespace EVAHN_LE_GAL
 {
     internal class DisplayConsole
     {
-        // affiche le resultat généré par les instructions de l'utilisateur, envoyées par EntriesConsole sous formes d'instructions et d'éléments
+        // Affiche le resultat généré par les instructions de l'utilisateur, envoyées par EntriesConsole sous formes d'instructions et d'éléments
         public void displayResult(object sender, string instruction, ElementToSend result)
         {
             switch (instruction)
