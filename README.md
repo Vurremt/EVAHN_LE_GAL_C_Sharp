@@ -28,27 +28,27 @@ Ainsi, on peut de manière très simple passer d'une application console à une 
 
 ## Listes des commandes :
 
-- display : affiche la structure en partant du dossier courant
-- display all : affiche la structure à partir du Root
-- create folder : Demande le nom du dossier à créer
-- create contact : Demande le nom de famille, puis le prenom, puis l'adresse mail (qui doit etre conforme), la société et un choix de lien avec l'utilisateur
-- delete folder : Demande le nom du dossier à supprimer
-- delete contact : Demande le nom de famille et le prenom du contact à supprimer
-- cd : mettre en argument un chemin d'accès, comme dans cmd ( ./ et ../ et Root/ sont supportés)
-- save xml : Demande le nom du fichier .xml dans lequel sauvergarder l'arborescence (par serialisation xml)
-- save binary : Demande le nom du fichier .bin dans lequel sauvergarder l'arborescence (par serialisation binaire)
-- load xml : Demande le nom du fichier .xml depuis lequel charger une arborescence
-- load binary : Demande le nom du fichier .bin depuis lequel charger une arborescence
-- clear : clear le terminal
-- help : Ouvre la fenetre d'aide des commandes
-- quit : Fermer l'application sans sauvegarder
+- **display** : affiche la structure en partant du dossier courant
+- **display all** : affiche la structure à partir du Root
+- **create folder** : Demande le nom du dossier à créer
+- **create contact** : Demande le nom de famille, puis le prenom, puis l'adresse mail (qui doit etre conforme), la société et un choix de lien avec l'utilisateur
+- **delete folder** : Demande le nom du dossier à supprimer
+- **delete contact** : Demande le nom de famille et le prenom du contact à supprimer
+- **cd** : mettre en argument un chemin d'accès, comme dans cmd ( ./ et ../ et Root/ sont supportés)
+- **save xml** : Demande le nom du fichier .xml dans lequel sauvergarder l'arborescence (par serialisation xml)
+- **save binary** : Demande le nom du fichier .bin dans lequel sauvergarder l'arborescence (par serialisation binaire)
+- **load xml** : Demande le nom du fichier .xml depuis lequel charger une arborescence
+- **load binary** : Demande le nom du fichier .bin depuis lequel charger une arborescence
+- **clear** : clear le terminal
+- **help** : Ouvre la fenetre d'aide des commandes
+- **quit** : Fermer l'application sans sauvegarder
 
 ## Choix Techniques
 
 - Utilisation de listeners et d'event pour la communication entre l'application et l'interface :
-- - **Raison 1** : Permet d'envoyer des instructions, ce qui rend indépendants les deux programmes, on peut donc modifier le pogramme sans changer l'interface ou alors apsser d'une interface console à une interface graphique sans toucher à l'application elle-même.
-- - **Raison 2** : Permet de pouvoir rajouter facilement d'autres focntionnalités et d'autres applications en parallèle de notre application actuelle car tout est en asynchrone
-- - **Raison 3** : Code bien plus lisible, au lieu d'un gros bloc application, l'application n'envoit qu'une requete simple, et le traitement est fait dans un autre fichier, le code st donc beaucoup moins chargé et mieux découpé
+  - **Raison 1** : Permet d'envoyer des instructions, ce qui rend indépendants les deux programmes, on peut donc modifier le pogramme sans changer l'interface ou alors apsser d'une interface console à une interface graphique sans toucher à l'application elle-même.
+  - **Raison 2** : Permet de pouvoir rajouter facilement d'autres focntionnalités et d'autres applications en parallèle de notre application actuelle car tout est en asynchrone
+  - **Raison 3** : Code bien plus lisible, au lieu d'un gros bloc application, l'application n'envoit qu'une requete simple, et le traitement est fait dans un autre fichier, le code st donc beaucoup moins chargé et mieux découpé
  
 - Utilisation de Aes pour le cryptage car c'est très simple de gérer des flux cryptés.
 
