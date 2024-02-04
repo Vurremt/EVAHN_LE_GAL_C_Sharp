@@ -12,13 +12,11 @@ namespace EVAHN_LE_GAL
     {
         static void Main(string[] args)
         {
-            string pathFileXML = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/Appli_c_sharp_Evahn_LE_GAL.xml";
-            //if(!File.Exists(pathFileXML));
-
-
+            // Creation des différents éléments
             EntriesConsole entryConsole = new EntriesConsole();
             DisplayConsole displayConsole = new DisplayConsole();
-
+            
+            // Abonnement aux listeners
             entryConsole.newInstruction += displayConsole.displayResult;
             entryConsole.changeColor += displayConsole.changeColor;
 
@@ -29,6 +27,7 @@ namespace EVAHN_LE_GAL
             Console.WriteLine(" --- Application C# Evahn LE GAL ---");
             Console.WriteLine("-type command 'help' to display possible actions\n");
 
+            // Lance et fait trourner l'application entière
             while (!needToQuit) {
                 needToQuit = entryConsole.readCommandUser();
             }

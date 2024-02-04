@@ -14,6 +14,7 @@ namespace EVAHN_LE_GAL
         Xml
     }
 
+    // Factory pour selectionner le bon serializer, pour garder l'encaspulation
     internal static class FactorySerializer
     {
         public static ISerializer GetSerializer(typeSerializer typeS)

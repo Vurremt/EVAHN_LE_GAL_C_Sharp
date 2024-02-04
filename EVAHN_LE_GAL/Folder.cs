@@ -9,7 +9,7 @@ namespace EVAHN_LE_GAL
     public class Folder
     {
         public string Name;
-        public int Depth; // Depth of the folder, for display purpose
+        public int Depth; // Profondeur dans l'arborescence du contact, pour l'affichage uniquement
         public DateTime CreationDate;
         public DateTime LastModifiedDate;
         public Folder Parent;
@@ -29,6 +29,7 @@ namespace EVAHN_LE_GAL
             this.Contacts = new List<Contact>();
         }
 
+        // Permet de transformer un FolderTemp en Folder (par récursivité) en lui associant un parent
         public Folder(FolderTemp copy, Folder parent)
         {
             this.Name = copy.Name;
@@ -44,6 +45,7 @@ namespace EVAHN_LE_GAL
             this.Contacts = copy.Contacts;
         }
 
+        // Pour l'affichage console des principales informations d'un FolderTemp
         public override string ToString()
         {
             return "[D] " + Name + " (creation " + CreationDate.ToString() + " | last modification " + LastModifiedDate.ToString() + " )";

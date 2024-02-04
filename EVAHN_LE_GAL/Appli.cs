@@ -13,7 +13,8 @@ using System.Xml.Serialization;
 
 namespace EVAHN_LE_GAL
 {
-    // A structure which is a folder, a contact or a string (union is very problematic in C#, i couldn't do it here so we lose some memory, but negligible)
+    // Une structure qui est un dossier, un contact ou une string (les union sont très problematiques en C#, je ne sais pas les faire)
+    // On perd un petit peu de mémoire, mais deja cette place est négligeable, et les champs non utilisés sont mis à null
     public class ElementToSend
     {
         public Folder folder;
@@ -42,7 +43,7 @@ namespace EVAHN_LE_GAL
         }
     }
 
-    // The base of the application, an object with some functions of modification internally, without interaction with users
+    // La base de l'application, un objet avec des fonctions de modifications internes, sans interaction directe avec les utilisateurs (qui doivent passer par l'interface puis l'EntriesConsole, qui est l'élément qui gère l'application)
     public class Appli
     {
         public Folder root;
@@ -51,27 +52,28 @@ namespace EVAHN_LE_GAL
 
         public Appli() {
             root = new Folder("Root", null);
-            root.Parent = root;
+            root.Parent = root; // Le parent de Root est lui même, pour pouvoir faire cd ../../../../ et retomber sur Root
             current = root;
-            pathMyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/Appli_c_sharp_Evahn_LE_GAL";
+            pathMyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/Appli_c_sharp_Evahn_LE_GAL"; // L'application connait à tout moment le chemin d'accès au repertoir de sauvegarde
             if(!Directory.Exists(pathMyDocuments)) Directory.CreateDirectory(pathMyDocuments);
         }
 
+        // Compare deux fichiers par noms
         private static int CompareFolderByName(Folder f1, Folder f2)
         {
             return f1.Name.CompareTo(f2.Name);
         }
 
-        // Creation of a new folder
+        // Creation d'un nouveau dossier
         public Folder createFolder(string name) {
             try
             {
-                // New folder
+                // Nouveau dossier
                 Folder newFolder = new Folder(name, current);
                 current.Folders.Add(newFolder);
                 current.Folders.Sort(CompareFolderByName);
 
-                // Update parent folders with lastest modifications
+                // Met à jour les dossiers parents avec la date actuelle
                 current.LastModifiedDate = DateTime.Now;
                 do
                 {
@@ -79,7 +81,7 @@ namespace EVAHN_LE_GAL
                     current.LastModifiedDate = DateTime.Now;
                 } while (current != root);
 
-                // Return the new folder
+                // Retourne le nouveau dossier
                 current = newFolder;
                 return newFolder;
             } catch(Exception e)
@@ -89,6 +91,7 @@ namespace EVAHN_LE_GAL
 
         }
 
+        // Compare deux contact par noms (Nom de famille + Prenom)
         private static int CompareContactByName(Contact c1, Contact c2)
         {
             string s1 = c1.LastName + " " + c1.FirstName;
@@ -96,17 +99,17 @@ namespace EVAHN_LE_GAL
             return s1.CompareTo(s2);
         }
 
-        // Creation of a new contact
+        // Creation d'un nouveau contact
         public Contact createContact(string LastName, string FirstName, string Mail, string Society, Link Link)
         {
             try
             {
-                // New contact
+                // Nouveau contact
                 Contact newContact = new Contact(current.Depth, LastName, FirstName, Mail, Society, Link);
                 current.Contacts.Add(newContact);
                 current.Contacts.Sort(CompareContactByName);
 
-                // Update parent folders with lastest modifications
+                // Met à jour les dossiers parents avec la date actuelle
                 Folder temp = current;
                 current.LastModifiedDate = DateTime.Now;
                 do
@@ -115,7 +118,7 @@ namespace EVAHN_LE_GAL
                     current.LastModifiedDate = DateTime.Now;
                 } while (current != root);
 
-                // Return the new folder
+                // Retourne le nouveau contact
                 current = temp;
                 return newContact;
             }
@@ -126,7 +129,7 @@ namespace EVAHN_LE_GAL
 
         }
 
-        // Yield elemens of the tree line by line with Depth-first search
+        // Yield les éléments de l'arborescence ligne par ligne avec l'algorithme de parcours en profondeur (avec pile, non recursif)
         public IEnumerable<ElementToSend> displayTree(Folder folderRoot)
         {
             Stack<Folder> stackFolders = new Stack<Folder>();
@@ -176,6 +179,7 @@ namespace EVAHN_LE_GAL
             return false;
         }
 
+        // prend un chemin d'accès en paramètre (sous forme de tableau de noms de dossiers) et parcours l'arborescence, élément après élément, jusqu'à la fin ou jusqu'à une erreur
         public string navigate(string[] path) {
             Folder save = current;
             int i = 0;
@@ -187,25 +191,27 @@ namespace EVAHN_LE_GAL
             if (path[path.Length - 1] == "") path = path.Take(path.Length - 1).ToArray();
             for (; i < path.Length; i++)
             {
-                if (path[i] == ".") current = current;
-                else if (path[i] == "..") current = current.Parent;
+                if (path[i] == ".") current = current; // On reste dans le même dossier
+                else if (path[i] == "..") current = current.Parent; // On va dans le dossier parent
                 else if (searchName(path[i]) != null)
                 {
-                    current = searchName(path[i]);
+                    current = searchName(path[i]); // On va dans le sous dossier s'il existe
                 }
                 else
                 {
-                    current = save;
+                    current = save; // Sinon on revient à zéro et on retourne une erreur (le nom du dossier introuvable)
                     return path[i];
                 }
             }
             return null;
         }
 
+        // Supprime un dossier avec son nom dans le repertoire courant
         public void deleteFolder(string name)
         {
             Folder folderToDelete = searchName(name);
 
+            // On supprime par recursion ses sous dossiers
             foreach (Folder folder in folderToDelete.Folders.ToList())
             {
                 current = folderToDelete;
@@ -228,6 +234,7 @@ namespace EVAHN_LE_GAL
             current = temp;
         }
 
+        // Supprimer un contact avec son nom
         public void deleteContact(string name)
         {
             Contact contact = null;
@@ -249,6 +256,7 @@ namespace EVAHN_LE_GAL
             current = temp;
         }
 
+        // Sauvegarder l'état actuel de l'arborescence avec un nom de fichier, un clé de cryptage et un type de sérialisation
         public void save(string filename, typeSerializer typeS, string key)
         {
             filename = pathMyDocuments + "/" + filename;
@@ -262,6 +270,7 @@ namespace EVAHN_LE_GAL
             serializer.Serialize(filename, copy, key);
         }
 
+        // Carger l'état d'une l'arborescence avec un nom de fichier, un clé de cryptage et un type de sérialisation
         public bool load(string filename, typeSerializer typeS, string key)
         {
             filename = pathMyDocuments + "/" + filename;

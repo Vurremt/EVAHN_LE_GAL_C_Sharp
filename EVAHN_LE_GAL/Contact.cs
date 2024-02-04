@@ -7,6 +7,7 @@ using System.Xml.Linq;
 
 namespace EVAHN_LE_GAL
 {
+    // Lien du contact avec l'utilisateur, il est facile d'en rajouter
     public enum Link
     {
         Friend,
@@ -16,6 +17,7 @@ namespace EVAHN_LE_GAL
         NotReferenced
     }
 
+    // Affichage du lien en string
     static class LinkMethods
     {
         public static String toString(this Link l)
@@ -39,7 +41,7 @@ namespace EVAHN_LE_GAL
     [Serializable]
     public class Contact
     {
-        public int Depth; // Depth of the contact, for display purpose
+        public int Depth; // Profondeur dans l'arborescence du contact, pour l'affichage uniquement
         public string LastName;
         public string FirstName;
         public string Mail;
@@ -47,6 +49,7 @@ namespace EVAHN_LE_GAL
         public Link Link;
         public DateTime CreationDate;
 
+        // Constructeur sans argument pour la serialisation
         public Contact()
         {
             this.Depth = 0;
@@ -69,6 +72,7 @@ namespace EVAHN_LE_GAL
             this.CreationDate = DateTime.Now;
         }
 
+        // Affichage du contact avec les données importantes pour la console
         public override string ToString()
         {
             return "|  [C] " + LastName + " " + FirstName + " (" + Society + "), " + Mail + ", Link : " + Link.ToString() + " (creation " + CreationDate.ToString() + " )";

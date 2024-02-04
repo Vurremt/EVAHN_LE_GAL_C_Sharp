@@ -57,8 +57,8 @@ namespace EVAHN_LE_GAL
         }
 
 
-        // Read instructions in the console, call appropriate functions and send the results line by line in an instruction
-        // Return if the application must close itself
+        // Lit les instructions de la console, appelle les fonctions appropriées et envoie les résultats ligne par ligne sous formes d'instructions et d'éléments
+        // Retourne si l'application doit se fermer (si l'utilisateur a choisi l'option 'quit')
         public bool readCommandUser(){
             newInstruction(this, "Heading", new ElementToSend(application.current));
 
